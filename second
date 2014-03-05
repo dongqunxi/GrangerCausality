@@ -1,0 +1,8 @@
+# ICA parameters
+n_components=0.99
+n_pca_components=1.0
+max_pca_components=None
+
+raw = mne.fiff.Raw(raw_fname, preload=True)
+events = mne.find_events(raw, stim_channel=stim_ch_name)
+picks = mne.fiff.pick_types(raw.info, meg=True, eeg=False, stim=False, eog=False, ecg=False, exclude='bads')
