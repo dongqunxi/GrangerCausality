@@ -1,4 +1,4 @@
-# ICA parameters
+
 n_components=0.99
 n_pca_components=1.0
 max_pca_components=None
