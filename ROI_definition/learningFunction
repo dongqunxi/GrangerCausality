@@ -1,0 +1,9 @@
+coh, freqs, times, n_epochs, n_tapers = spectral_connectivity(stcs,
+    method='plv', mode='cwt_morlet', indices=indices,
+    sfreq=sfreq, cwt_frequencies=cwt_frequencies, cwt_n_cycles=7, faverage=True, n_jobs=2)
+
+faverage : boolean
+Average connectivity scores for each frequency band. If True, the output freqs will be a list with arrays of the frequencies that were averaged.
+
+coh: (n_con, n_frequencies, n_times)
+(n_con, n_frequencies, n_times) mode: ‘cwt_morlet’ when “indices” is specified and “n_con = len(indices[0])”.
