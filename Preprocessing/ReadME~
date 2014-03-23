@@ -1,0 +1,37 @@
+The workflow:
+
+Noise_covariance_computing.py
+Function: noise covariance matrix.
+
+parameter: the name of subject
+
+loadfiles: subject_path/MEG/subject_emptyroom.fif
+                        
+
+output: subject_path/MEG/subject_emptyroom_cov.fif
+        
+
+
+ECG_EOG_clean.py
+Function: remove ECG and EOG artefacts(For performace viewing calling compare_raw_files.py)
+parameter: the name of subject 
+loadfiles:subject_path/MEG/subject_audi_cued-raw.fif'
+output: subject_audi_cued-raw_cle.fif
+
+BrainComponents_identification.py
+Function:Get the brain response related with events
+parameter: the name of subject and event channel 'stim' or 'resp'
+loadfiles: subject_path/MEG/ssp_cleaned_subject_audi_cued-raw_cle.fif
+output: raw_ssp_cleaned_subject_audi_cued-raw_cle_$trigger.fif
+        ave_ssp_cleaned_subject_audi_cued-raw_cle_$trigger.fif
+        (trigger='stim' or 'resp')
+
+sourcelocalization.py
+Function: make fwd operator and inv operator
+parameter:the name of subject and event channel 'stim' or 'resp'
+loadfiles: subject_path/MEG/subject-trans.fif, subject_path/MEG/ave_ssp_cleaned_subject_audi_cued-raw_cle_$trigger.fif, 
+           subject_path/MEG/subject_emptyroom_cov.fif, subject_path/bem/subject-oct-6-src.fif, subject_path/bem/subject-5120-5120-bem-sol.fif
+output: subject_trigger-fwd.fif
+        subject_trigger-inv.fif
+        fsaverage_subject-lh.stc fsaverage_subject-rh.stc 
+
