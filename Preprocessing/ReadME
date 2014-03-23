@@ -29,7 +29,7 @@ output: raw_subject_audi_cued-raw_cle_$trigger.fif
 sourcelocalization.py
 Function: make fwd operator and inv operator
 parameter:the name of subject and event channel 'stim' or 'resp'
-loadfiles: subject_path/MEG/subject-trans.fif, subject_path/MEG/ave_ssp_cleaned_subject_audi_cued-raw_cle_$trigger.fif, 
+loadfiles: subject_path/MEG/subject-trans.fif, subject_path/MEG/ave_subject_audi_cued-raw_cle_$trigger.fif, 
            subject_path/MEG/subject_emptyroom_cov.fif, subject_path/bem/subject-oct-6-src.fif, subject_path/bem/subject-5120-5120-bem-sol.fif
 output: subject_trigger-fwd.fif
         subject_trigger-inv.fif
