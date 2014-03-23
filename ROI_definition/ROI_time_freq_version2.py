@@ -1,3 +1,6 @@
+#The version 2, morph the common RefROI into individual space, then compute
+#phase lock indices and connectivity under the individual space. Last morph
+#the phase lock estimates into the common space. It is faster then version3
 import numpy as np
 import mne, sys, os
 from mne.datasets import sample
@@ -53,7 +56,7 @@ inverse_operator = mne.minimum_norm.make_inverse_operator(epochs.info, forward_m
                                              loose=0.2, depth=0.8)
 
 #Load the reference ROI
-label_fname = '/home/qdong/freesurfer/subjects/fsaverage/label/lh.Auditory_82.label'
+label_fname = '/home/qdong/freesurfer/subjects/fsaverage/label/lh.RefROI1.label'
 label = mne.read_label(label_fname)
 label.values.fill(1.0)
 label_morph = label.morph(subject_from='fsaverage', subject_to=subject, smooth=5, 
@@ -67,7 +70,9 @@ lambda2 = 1.0 / snr ** 2
 evoked = epochs.average()
 stc = apply_inverse(evoked, inverse_operator, lambda2, method,
                     pick_ori="normal")
-
+#For defining REF_ROI
+stc_morph = mne.morph_data(subject, 'fsaverage', stc, 5, smooth=5)
+stc_morph.save(subject_path+'/Ref_fsaverage'+subject+'_' +trigger, ftype='stc')
 # Restrict the source estimate to the label in the left auditory cortex 
 #(reference ROI)
 stc_label = stc.in_label(label_morph)
@@ -106,11 +111,12 @@ coh_stc = mne.SourceEstimate(coh_new, vertices=stc.vertno, tmin=tmin,#tmin=1e-3 
                              #tstep=1e-3 * tstep, subject=subject)
 coh_stc.save(subject_path+'/ROI_'+subject+'_' +trigger, ftype='stc')
 # Now we can visualize the coherence using the plot method
-brain = coh_stc.plot(subject, 'inflated', 'lh', fmin=0.25, fmid=0.4,
-                     fmax=0.65, time_label='Coherence %0.1f ms', time_viewer=True,
-                     subjects_dir=subjects_dir)
+#brain = coh_stc.plot(subject, 'inflated', 'lh', fmin=0.25, fmid=0.4,
+ #                    fmax=0.65, time_label='Coherence %0.1f ms', time_viewer=True,
+  #                   subjects_dir=subjects_dir)
 
-brain.show_view('lateral')       
+#brain.show_view('lateral')       
 
 #tksurfer -annot aparc subjectid rh inflated
-#mne_make_movie --stcin ROI_101611_stim-lh.stc --tmin 20 --tmax 120 --morph fsaverage --smooth 5 --mov first_cwt --subject 101611 --lh --spm --fthresh 0.25 --fmid 0.4 --fmax 0.65
+#mne_make_movie --stcin ROI_101611_stim-lh.stc --tmin 20 --tmax 120 --morph fsaverage --smooth 5 --mov first_cwt --subject 101611 --rh  --fthresh 0.15 --fmid 0.3 --fmax 0.55
+#mne_make_movie --stcin Ref_fsaverage101611_stim-lh.stc --tmin 20 --tmax 120 --mov first_dSPM --subject fsaverage --smooth 5 --lh --spm --fthresh 5 --fmid 8 --fmax 12
